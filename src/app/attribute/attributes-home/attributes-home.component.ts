@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {Attribute} from "../../shared/models/attribute";
 import {AttributeService} from "../services/attribute.service";
 
@@ -18,12 +19,16 @@ export class AttributesHomeComponent implements OnInit, OnDestroy {
   dtTrigger: Subject<any> = new Subject();
 
   constructor(private attributeService: AttributeService) {
-      this.subscription = this.attributeService.getAll().subscribe(
-        // data => {
-        //   this.attributes = this.filteredAttributes = (data as any).data;
-        //   this.dtTrigger.next();
-        // }
-      );
+      this.subscription = this.attributeService.getAll()
+        .pipe(
+          map( actions =>
+            actions.map( action => {
+                const data = action as Attribute;
+                this.dtTrigger.next();
+                return data;
+              }
+          )))
+        .subscribe( attributes => this.attributes = this.filteredAttributes = attributes);
   }
 
   ngOnInit(): void {
