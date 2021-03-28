@@ -1,12 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {ErrorHandler, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './core/navbar/navbar.component';
-import {RouterModule} from "@angular/router";
+import { RouterModule } from "@angular/router";
 import { FooterComponent } from './core/footer/footer.component';
 import { HomeComponent } from './core/home/home.component';
-import { AttributeFormComponent } from './Attribute/attribute-form/attribute-form.component';
+import { AttributeFormComponent } from './attribute/attribute-form/attribute-form.component';
+import { AttributesHomeComponent } from './attribute/attributes-home/attributes-home.component';
+import { DataTablesModule } from "angular-datatables";
+import { HttpClientModule } from "@angular/common/http";
+import { AttributeService } from "./attribute/services/attribute.service";
+import { AppErrorHandler } from './shared/errors/app-error-handler';
 
 @NgModule({
   declarations: [
@@ -14,16 +19,23 @@ import { AttributeFormComponent } from './Attribute/attribute-form/attribute-for
     NavbarComponent,
     FooterComponent,
     HomeComponent,
-    AttributeFormComponent
+    AttributeFormComponent,
+    AttributesHomeComponent
   ],
     imports: [
         BrowserModule,
+        DataTablesModule,
+        HttpClientModule,
         RouterModule.forRoot([
           {path: '', component: HomeComponent},
-          {path: 'attribute', component: AttributeFormComponent}
+          {path: 'attribute/form', component: AttributeFormComponent},
+          {path: 'attribute', component: AttributesHomeComponent}
         ])
     ],
-  providers: [],
+  providers: [
+    AttributeService
+    // { provide: ErrorHandler, useClass: AppErrorHandler }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
