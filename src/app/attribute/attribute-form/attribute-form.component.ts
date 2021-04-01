@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Attribute} from "../../shared/models/attribute";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AttributeNameValidators} from "./attributeNameValidators";
+import {AttributeService} from "../services/attribute.service";
 
 @Component({
   selector: 'app-attribute-form',
@@ -7,9 +11,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AttributeFormComponent implements OnInit {
 
-  constructor() { }
+  form = new FormGroup({
+    attrName: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.minLength(2)],
+      AttributeNameValidators.alreadyExists(this.attributeService)),
+    attrValue: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(50),
+      Validators.minLength(1)])
+  });
+
+  get attrName() {
+    return this.form.get('attrName');
+  }
+
+  get attrValue() {
+    return this.form.get('attrValue');
+  }
+
+  attribute: Attribute = new Attribute();
+
+  constructor(private attributeService: AttributeService) {
+  }
 
   ngOnInit(): void {
+
+  }
+
+  save(attribute: Attribute) {
+
   }
 
 }
