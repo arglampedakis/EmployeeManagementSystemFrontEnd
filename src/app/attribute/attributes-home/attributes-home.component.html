@@ -1,5 +1,5 @@
 <p>
-  <a routerLink="/attribute/form" class="btn btn-primary">New Attribute</a>
+  <a routerLink="/attribute/form/new" class="btn btn-primary">New Attribute</a>
 </p>
 
 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
@@ -8,7 +8,8 @@
     <th>Id</th>
     <th>Name</th>
     <th>Value</th>
-    <th></th>
+    <th>Edit</th>
+    <th>Delete</th>
   </tr>
   </thead>
   <tbody>
@@ -17,7 +18,10 @@
     <td>{{ attr.attrName }}</td>
     <td>{{ attr.attrValue }}</td>
     <td>
-<!--      <a [routerLink]="['/attribute/form/', a.attrId]">Edit</a>-->
+      <a class="btn-sm btn-primary" [routerLink]="['/attribute/form/', attr.attrId]">Edit</a>
+    </td>
+    <td>
+      <button class="btn-sm btn-danger" (click)="delete(attr.attrId)">Delete</button>
     </td>
   </tr>
   </tbody>

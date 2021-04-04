@@ -1,17 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {Attribute} from "../../shared/models/attribute";
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AttributeNameValidators} from "./attributeNameValidators";
 import {AttributeService} from "../services/attribute.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-attribute-form',
   templateUrl: './attribute-form.component.html',
   styleUrls: ['./attribute-form.component.css']
 })
-export class AttributeFormComponent implements OnInit {
+export class AttributeFormComponent implements OnInit, OnDestroy {
 
+  id;
   form = new FormGroup({
+    attrId: new FormControl(),
     attrName: new FormControl('', [
         Validators.required,
         Validators.maxLength(50),
@@ -23,25 +26,42 @@ export class AttributeFormComponent implements OnInit {
       Validators.minLength(1)])
   });
 
-  get attrName() {
-    return this.form.get('attrName');
-  }
+  constructor(private attributeService: AttributeService,
+              private route: ActivatedRoute,
+              private router: Router) {
 
-  get attrValue() {
-    return this.form.get('attrValue');
-  }
+    this.id = this.route.snapshot.paramMap.get('id');
 
-  attribute: Attribute = new Attribute();
-
-  constructor(private attributeService: AttributeService) {
+    if (this.id) {
+      this.attributeService.getById(this.id).pipe(take(1)).subscribe(attr => this.form.setValue(attr));
+    }
   }
 
   ngOnInit(): void {
 
   }
 
-  save(attribute: Attribute) {
+  ngOnDestroy(): void {
+    //TODO check whether or not I need to unsubscribe from the http Observables
+  }
 
+  save() {
+    if (this.form.invalid) {
+      this.form.setErrors({
+        invalidSubmit: true
+      });
+    } else {
+      this.attributeService.save(this.form.value).subscribe();
+      this.router.navigate(['/attribute']);
+    }
+  }
+
+  get attrName() {
+    return this.form.get('attrName');
+  }
+
+  get attrValue() {
+    return this.form.get('attrValue');
   }
 
 }

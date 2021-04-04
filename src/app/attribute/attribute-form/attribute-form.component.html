@@ -4,12 +4,16 @@
   </div>
 </div>
 
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="this.save()">
   <div class="row mt-4">
     <div class="col-md-6">
+      <div *ngIf="form.errors" class="alert alert-danger">
+        Invalid submit. Please fill all the necessary inputs.
+      </div>
+      <input type="text" formControlName="attrId" hidden>
       <div class="form-floating mb-3">
         <input formControlName="attrName"
-          type="text" class="form-control" id="attrName">
+               type="text" class="form-control" id="attrName">
         <label for="attrName">Name</label>
         <div *ngIf="attrName.touched && attrName.invalid" class="alert alert-danger">
           <div *ngIf="attrName.errors.required">Attribute name is required.</div>
@@ -27,7 +31,7 @@
     <div class="col-md-6">
       <div class="form-floating mb-3">
         <input formControlName="attrValue"
-          type="text" class="form-control" id="attrValue">
+               type="text" class="form-control" id="attrValue">
         <label for="attrValue">Value</label>
         <div *ngIf="attrValue.touched && attrValue.invalid" class="alert alert-danger">
           <div *ngIf="attrValue.errors.required">Attribute value is required.</div>
@@ -42,8 +46,8 @@
   </div>
   <div class="row">
     <div class="col-md-6 mt-3 offset-1">
-      <button class="btn btn-primary mx-auto">Save</button>
-      <button class="btn btn-outline-primary mx-4">Clear</button>
+      <button class="btn btn-primary mx-auto" type="submit">Save</button>
+      <button class="btn btn-outline-primary mx-4" type="reset">Clear</button>
     </div>
   </div>
 </form>

@@ -22,16 +22,28 @@ export class AttributeService {
     );
   }
 
-  create(attribute: Attribute) {
+  getById(id): Observable<Attribute> {
+    return this.http.get<Attribute>(this.url + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  save(attribute: Attribute) {
     return this.http
-      .post(this.url + "save", {attribute: attribute})
+      .post(this.url + "save", attribute)
       .pipe(
         catchError(this.handleError)
       );
   }
 
+  delete(id){
+    return this.http.delete(this.url + 'delete/' + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   checkIfAttrNameExists(attrName: string) {
-    return  this.http.get(this.url + "checkName/" + attrName);
+    return this.http.get(this.url + "checkName/" + attrName);
   }
 
   private handleError(error: Response) {

@@ -31,7 +31,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     HttpClientModule,
     RouterModule.forRoot([
       {path: '', component: HomeComponent},
-      {path: 'attribute/form', component: AttributeFormComponent},
+      {path: 'attribute/form/new', component: AttributeFormComponent},
+      {path: 'attribute/form/:id', component: AttributeFormComponent},
       {path: 'attribute', component: AttributesHomeComponent}
     ])
   ],
