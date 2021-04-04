@@ -1,0 +1,88 @@
+<div class="row mt-5">
+  <div class="col text-center">
+    <h5>Create/Update an Employee</h5>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="this.save()">
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div *ngIf="form.errors" class="alert alert-danger">
+        Invalid submit. Please fill all the necessary inputs.
+      </div>
+      <input type="text" formControlName="empId" hidden>
+      <div class="form-floating mb-3">
+        <input formControlName="empName"
+               type="text" class="form-control" id="empName">
+        <label for="empName">Name</label>
+        <div *ngIf="empName.touched && empName.invalid" class="alert alert-danger">
+          <div *ngIf="empName.errors.required">Employee name is required.</div>
+          <div *ngIf="empName.errors.minlength">Employee name should be at least 3 characters.</div>
+          <div *ngIf="empName.errors.maxlength">Employee name should be at most 50 characters.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input formControlName="empDateOfBirth"
+               type="date" class="form-control" id="empDateOfBirth">
+        <label for="empDateOfBirth">Date of Birth</label>
+        <div *ngIf="empDateOfBirth.touched && empDateOfBirth.invalid" class="alert alert-danger">
+          <div *ngIf="empDateOfBirth.errors.required">Date of Birth is required.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input formControlName="empSupervisor"
+               type="number" class="form-control" id="empSupervisor">
+        <label for="empSupervisor">Supervisor Id</label>
+        <div *ngIf="empSupervisor.touched && empSupervisor.invalid" class="alert alert-danger">
+          <div *ngIf="empSupervisor.errors.required">Supervisor Id is required.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-check mb-3">
+        <input formControlName="empVehicle"
+               type="checkbox" class="form-check-input" id="empVehicle">
+        <label for="empVehicle">Has Vehicle</label>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-md-6">
+        Address properties here
+    </div>
+    <div class="col-md-6">
+  and here
+    </div>
+  </div>
+  <div class="row">
+    <hr>
+    <h5 class="">Select Attributes for this employee:</h5>
+    <div *ngFor="let attr of attributes" class="col-md-4 col-sm-6 col-12">
+      <div class="form-check">
+<!--        //TODO fix checked property-->
+        <input class="form-check-input" type="checkbox" value="{{attr.attrId}}" id="{{attr.attrId}}" [checked]="hasAttribute(attr.attrId)">
+        <label class="form-check-label" for="{{attr.attrId}}">
+          {{ attr.attrName }}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-center mt-3">
+      <hr>
+      <button class="btn btn-primary mx-auto" type="submit">Save</button>
+      <button class="btn btn-outline-primary mx-4" type="reset">Clear</button>
+    </div>
+  </div>
+</form>
+
+
+
+
+

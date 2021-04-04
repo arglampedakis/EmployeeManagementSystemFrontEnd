@@ -23,6 +23,10 @@ export class AttributesHomeComponent implements OnInit, OnDestroy {
   }
 
   fetchTableData() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+
     this.subscription = this.attributeService.getAll()
       .pipe(
         map(actions =>

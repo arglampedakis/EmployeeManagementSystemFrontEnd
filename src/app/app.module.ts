@@ -13,6 +13,8 @@ import {HttpClientModule} from "@angular/common/http";
 import {AttributeService} from "./attribute/services/attribute.service";
 import {AppErrorHandler} from './shared/errors/app-error-handler';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { EmployeeHomeComponent } from './employee/employee-home/employee-home.component';
+import { EmployeeFormComponent } from './employee/employee-form/employee-form.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     FooterComponent,
     HomeComponent,
     AttributeFormComponent,
-    AttributesHomeComponent
+    AttributesHomeComponent,
+    EmployeeHomeComponent,
+    EmployeeFormComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
       {path: '', component: HomeComponent},
       {path: 'attribute/form/new', component: AttributeFormComponent},
       {path: 'attribute/form/:id', component: AttributeFormComponent},
-      {path: 'attribute', component: AttributesHomeComponent}
+      {path: 'attribute', component: AttributesHomeComponent},
+      {path: 'employee/form/new', component: EmployeeFormComponent},
+      {path: 'employee/form/:id', component: EmployeeFormComponent},
+      {path: 'employee', component: EmployeeHomeComponent}
     ])
   ],
   providers: [

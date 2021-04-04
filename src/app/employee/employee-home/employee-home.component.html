@@ -1,0 +1,32 @@
+<p>
+  <a routerLink="/employee/form/new" class="btn btn-primary">New Employee</a>
+</p>
+
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Date of Birth</th>
+    <th>Has vehicle</th>
+    <th>Supervisor Id</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let emp of filteredEmployees">
+    <td>{{ emp.empId }}</td>
+    <td>{{ emp.empName }}</td>
+    <td>{{ emp.empDateOfBirth | date:'mediumDate'}}</td>
+    <td>{{ emp.empVehicle? 'Yes' : 'No' }}</td>
+    <td>{{ emp.empSupervisor? emp.empSupervisor : 'No Sup' }}</td>
+    <td>
+      <a class="btn-sm btn-primary" [routerLink]="['/employee/form/', emp.empId]">Edit</a>
+    </td>
+    <td>
+<!--      <button class="btn-sm btn-danger" (click)="delete(emp.empId)">Delete</button>-->
+    </td>
+  </tr>
+  </tbody>
+</table>

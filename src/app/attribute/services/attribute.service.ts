@@ -10,7 +10,7 @@ import {AppError} from 'src/app/shared/errors/app-error';
 @Injectable()
 export class AttributeService {
 
-  private url: string;
+  private readonly url: string;
 
   constructor(private http: HttpClient) {
     this.url = 'http://localhost:8080/api/v1/attribute/';
