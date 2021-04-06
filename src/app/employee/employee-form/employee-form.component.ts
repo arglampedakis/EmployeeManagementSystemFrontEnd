@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map, take} from "rxjs/operators";
 import {EmployeeService} from "../services/employee.service";
 import {AttributeService} from "../../attribute/services/attribute.service";
 import {Attribute} from "../../shared/models/attribute";
+import {formatDate} from "@angular/common";
+import {Employee} from "../../shared/models/employee";
 
 @Component({
   selector: 'app-employee-form',
@@ -14,6 +15,8 @@ import {Attribute} from "../../shared/models/attribute";
 export class EmployeeFormComponent implements OnInit {
 
   id;
+  originalEmployee: Employee = new Employee();
+
   form = new FormGroup({
     empId: new FormControl(),
     empName: new FormControl('', [
@@ -21,9 +24,7 @@ export class EmployeeFormComponent implements OnInit {
       Validators.maxLength(50),
       Validators.minLength(2)]),
     empDateOfBirth: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(50),
-      Validators.minLength(1)]),
+      Validators.required]),
     empVehicle: new FormControl('', [
       Validators.required,
       Validators.maxLength(50),
@@ -48,22 +49,38 @@ export class EmployeeFormComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
 
     if (this.id) {
-      this.employeeService.getById(this.id).pipe(take(1)).subscribe(emp => this.form.setValue(emp));
+      this.employeeService.getById(this.id).subscribe(emp => {
+        this.originalEmployee = emp;
+        this.fillFormWithEmployee(emp);
+      });
       this.fetchEmployeesAttributes();
     }
   }
 
-  fetchAllAttributes(){
+  fillFormWithEmployee(emp) {
+    this.form.controls.empId.setValue(emp.empId);
+    this.form.controls.empName.setValue(emp.empName);
+    if (emp.empDateOfBirth) {
+      this.form.controls.empDateOfBirth.setValue(formatDate(new Date(emp.empDateOfBirth), 'yyyy-MM-dd', 'en'));
+    }
+    this.form.controls.empVehicle.setValue(emp.empVehicle);
+    this.form.controls.empSupervisor.setValue(emp.empSupervisor);
+  }
+
+  resetForm() {
+    this.fillFormWithEmployee(this.originalEmployee);
+  }
+
+  fetchAllAttributes() {
     this.attributeService.getAll().subscribe(attributes => this.attributes = attributes);
   }
 
-  fetchEmployeesAttributes(){
-    this.employeeService.getEmployeeAttributesById(this.id).subscribe( attributes => this.employeesAttributes = attributes);
+  fetchEmployeesAttributes() {
+    this.employeeService.getEmployeeAttributesById(this.id).subscribe(attributes => this.employeesAttributes = attributes);
   }
 
-  hasAttribute(attrId){
-    //TODO this is not working
-    return this.employeesAttributes.indexOf(this.attributes.find(attr => attr.attrId == attrId)) != -1;
+  hasAttribute(attrId) {
+    return this.employeesAttributes.map(attr => attr.attrId).indexOf(attrId) != -1;
   }
 
   save() {
@@ -75,6 +92,10 @@ export class EmployeeFormComponent implements OnInit {
       this.employeeService.save(this.form.value).subscribe();
       this.router.navigate(['/employee']);
     }
+  }
+
+  get empId() {
+    return this.form.get('empId');
   }
 
   get empName() {
