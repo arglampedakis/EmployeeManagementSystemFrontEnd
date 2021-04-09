@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EmployeeService} from "../services/employee.service";
 import {AttributeService} from "../../attribute/services/attribute.service";
@@ -16,24 +16,24 @@ export class EmployeeFormComponent implements OnInit {
 
   id;
   originalEmployee: Employee = new Employee();
-
-  form = new FormGroup({
-    empId: new FormControl(),
-    empName: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(50),
-      Validators.minLength(2)]),
-    empDateOfBirth: new FormControl('', [
-      Validators.required]),
-    empVehicle: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(50),
-      Validators.minLength(1)]),
-    empSupervisor: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(50),
-      Validators.minLength(1)])
-  });
+  form: FormGroup;
+  // form = new FormGroup({
+  //   empId: new FormControl(),
+  //   empName: new FormControl('', [
+  //     Validators.required,
+  //     Validators.maxLength(50),
+  //     Validators.minLength(2)]),
+  //   empDateOfBirth: new FormControl('', [
+  //     Validators.required]),
+  //   empVehicle: new FormControl('', [
+  //     Validators.required,
+  //     Validators.maxLength(50),
+  //     Validators.minLength(1)]),
+  //   empSupervisor: new FormControl('', [
+  //     Validators.required,
+  //     Validators.maxLength(50),
+  //     Validators.minLength(1)])
+  // });
 
   attributes: Attribute[];
   employeesAttributes: Attribute[] = [];
@@ -41,12 +41,32 @@ export class EmployeeFormComponent implements OnInit {
   constructor(private employeeService: EmployeeService,
               private attributeService: AttributeService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private formBuilder: FormBuilder) {
+
+    this.form = this.formBuilder.group({
+      empId: new FormControl(),
+      empName: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.minLength(2)]),
+      empDateOfBirth: new FormControl('', [
+        Validators.required]),
+      empVehicle: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.minLength(1)]),
+      empSupervisor: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.minLength(1)]),
+      attributesList: this.formBuilder.array([])
+    });
   }
 
   ngOnInit(): void {
-    this.fetchAllAttributes();
     this.id = this.route.snapshot.paramMap.get('id');
+    this.fetchAllAttributes();
 
     if (this.id) {
       this.employeeService.getById(this.id).subscribe(emp => {
@@ -55,6 +75,8 @@ export class EmployeeFormComponent implements OnInit {
       });
       this.fetchEmployeesAttributes();
     }
+
+
   }
 
   fillFormWithEmployee(emp) {
@@ -67,12 +89,14 @@ export class EmployeeFormComponent implements OnInit {
     this.form.controls.empSupervisor.setValue(emp.empSupervisor);
   }
 
-  resetForm() {
-    this.fillFormWithEmployee(this.originalEmployee);
-  }
-
   fetchAllAttributes() {
-    this.attributeService.getAll().subscribe(attributes => this.attributes = attributes);
+    this.attributeService.getAll().subscribe(attributes => {
+      this.attributes = attributes;
+      this.attributes.forEach(attr => {
+        (this.form.get('attributesList') as FormArray).push(this.createAttribute(attr));
+      });
+    });
+
   }
 
   fetchEmployeesAttributes() {
@@ -89,9 +113,17 @@ export class EmployeeFormComponent implements OnInit {
         invalidSubmit: true
       });
     } else {
-      this.employeeService.save(this.form.value).subscribe();
+      // this.employeeService.save(this.form.value).subscribe();
       this.router.navigate(['/employee']);
     }
+  }
+
+  createAttribute(attr: Attribute): FormGroup {
+    return this.formBuilder.group(attr);
+  }
+
+  resetForm() {
+    this.fillFormWithEmployee(this.originalEmployee);
   }
 
   get empId() {
@@ -112,6 +144,10 @@ export class EmployeeFormComponent implements OnInit {
 
   get empSupervisor() {
     return this.form.get('empSupervisor');
+  }
+
+  get attributesList() {
+    return this.form.get('attributesList')['controls'];
   }
 
 }

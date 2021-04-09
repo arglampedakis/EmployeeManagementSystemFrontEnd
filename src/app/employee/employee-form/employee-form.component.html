@@ -55,21 +55,31 @@
   </div>
   <div class="row mb-2">
     <div class="col-md-6">
-        Address properties here
+      Address properties here
+      <!--      <input type="text" formControlName="addrId" hidden>-->
+      <!--      <input type="text" formControlName="addrLongitude" hidden>-->
+      <!--      <input type="text" formControlName="addrLatitude" hidden>-->
+
+      <!--      <input type="text" formControlName="addrCountry" hidden>-->
+      <!--      <input type="text" formControlName="addrCity" hidden>-->
+      <!--      <input type="text" formControlName="addrStreetName" hidden>-->
+      <!--      <input type="text" formControlName="addrStreetNumber" hidden>-->
+      <!--      <input type="text" formControlName="addrPostalCode" hidden>-->
     </div>
     <div class="col-md-6">
-  and here
+      and here
     </div>
   </div>
   <div class="row">
     <hr>
     <h5 class="">Select Attributes for this employee:</h5>
-    <div *ngFor="let attr of attributes" class="col-md-4 col-sm-6 col-12">
-      <div class="form-check">
-<!--        //TODO fix checked property-->
-        <input class="form-check-input" type="checkbox" value="{{attr.attrId}}" id="{{attr.attrId}}" [checked]="hasAttribute(attr.attrId)">
-        <label class="form-check-label" for="{{attr.attrId}}">
-          {{ attr.attrName }}
+    <div formArrayName="attributesList" *ngFor="let attr of attributesList; let i = index" class="col-md-4 col-sm-6 col-12">
+      <div [formGroupName]="i" class="form-check">
+        <input formControlName="attrId" class="form-check-input" type="checkbox" [value]="attr.get('attrId').value"
+               [id]="attr.get('attrId').value"
+               [checked]="hasAttribute(attr.get('attrId').value)">
+        <label class="form-check-label" [for]="attr.get('attrId').value">
+          {{ attr.get('attrName').value }} ({{ attr.get('attrValue').value }})
         </label>
       </div>
     </div>
