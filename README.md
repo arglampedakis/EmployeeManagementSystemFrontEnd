@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/arglampedakis/EmployeeManagementSystemFrontEnd.svg?style=svg)](https://circleci.com/gh/arglampedakis/EmployeeManagementSystemFrontEnd)
 
-# CiteEmployeeMngmntFrontend
+# EmployeeManagementSystemFrontEnd
 
 ## Περιγραφή
 
