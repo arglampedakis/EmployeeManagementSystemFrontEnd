@@ -16,6 +16,7 @@ export class EmployeeHomeComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  deletionMessage: Boolean;
 
   constructor(private employeeService: EmployeeService) {
     this.fetchTableData();
@@ -58,4 +59,17 @@ export class EmployeeHomeComponent implements OnInit, OnDestroy {
       this.employees;
   }
 
+  delete(id){
+    if (confirm('Are you sure you want to delete this employee?')) {
+      this.deletionMessage = true;
+      // this.attributeService.delete(id).subscribe(x => this.fetchTableData());
+      this.fadeOutLink();
+    }
+  }
+
+  fadeOutLink() {
+    setTimeout( () => {
+      this.deletionMessage = false;
+    }, 2000);
+  }
 }

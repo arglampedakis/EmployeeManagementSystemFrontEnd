@@ -17,6 +17,7 @@ export class AttributesHomeComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  deletionMessage: Boolean;
 
   constructor(private attributeService: AttributeService) {
     this.fetchTableData();
@@ -53,13 +54,23 @@ export class AttributesHomeComponent implements OnInit, OnDestroy {
   }
 
   delete(id) {
-    this.attributeService.delete(id).subscribe(x => this.fetchTableData());
+    if (confirm('Are you sure you want to delete this attribute?')) {
+      this.deletionMessage = true;
+      this.attributeService.delete(id).subscribe(x => this.fetchTableData());
+      this.fadeOutLink();
+    }
   }
 
   filter(query: string) {
     this.filteredAttributes = (query) ?
       this.attributes.filter(a => a.attrName.toLowerCase().includes(query.toLowerCase())) :
       this.attributes;
+  }
+
+  fadeOutLink() {
+    setTimeout( () => {
+      this.deletionMessage = false;
+    }, 2000);
   }
 
 }

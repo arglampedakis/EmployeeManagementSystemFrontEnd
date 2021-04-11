@@ -53,35 +53,70 @@
       </div>
     </div>
   </div>
+  <hr>
   <div class="row mb-2">
     <div class="col-md-6">
-      Address properties here
-      <!--      <input type="text" formControlName="addrId" hidden>-->
-      <!--      <input type="text" formControlName="addrLongitude" hidden>-->
-      <!--      <input type="text" formControlName="addrLatitude" hidden>-->
+      <input type="text" formControlName="addrId" hidden>
+      <input type="text" formControlName="addrLongitude" hidden>
+      <input type="text" formControlName="addrLatitude" hidden>
 
-      <!--      <input type="text" formControlName="addrCountry" hidden>-->
-      <!--      <input type="text" formControlName="addrCity" hidden>-->
-      <!--      <input type="text" formControlName="addrStreetName" hidden>-->
-      <!--      <input type="text" formControlName="addrStreetNumber" hidden>-->
-      <!--      <input type="text" formControlName="addrPostalCode" hidden>-->
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" formControlName="addrCountry" id="addrCountry">
+        <label for="addrCountry">Country</label>
+        <div *ngIf="addrCountry.touched && addrCountry.invalid" class="alert alert-danger">
+          <div *ngIf="addrCountry.errors.required">Country is required.</div>
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
-      and here
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="addrCity" formControlName="addrCity">
+        <label for="addrCity">City</label>
+        <div *ngIf="addrCity.touched && addrCity.invalid" class="alert alert-danger">
+          <div *ngIf="addrCity.errors.required">City is required.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-md-4">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="addrStreetName" formControlName="addrStreetName">
+        <label for="addrStreetName">Street Name</label>
+        <div *ngIf="addrStreetName.touched && addrStreetName.invalid" class="alert alert-danger">
+          <div *ngIf="addrStreetName.errors.required">Street Name is required.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="addrStreetNumber" formControlName="addrStreetNumber">
+        <label for="addrStreetNumber">Street Number</label>
+        <div *ngIf="addrStreetNumber.touched && addrStreetNumber.invalid" class="alert alert-danger">
+          <div *ngIf="addrStreetNumber.errors.required">Street Number is required.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="addrPostalCode" formControlName="addrPostalCode">
+        <label for="addrPostalCode">Post Code</label>
+        <div *ngIf="addrPostalCode.touched && addrPostalCode.invalid" class="alert alert-danger">
+          <div *ngIf="addrPostalCode.errors.required">Postal Code is required.</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
     <hr>
     <h5 class="">Select Attributes for this employee:</h5>
-    <div formArrayName="attributesList" *ngFor="let attr of attributesList; let i = index" class="col-md-4 col-sm-6 col-12">
-      <div [formGroupName]="i" class="form-check">
-        <input formControlName="attrId" class="form-check-input" type="checkbox" [value]="attr.get('attrId').value"
-               [id]="attr.get('attrId').value"
-               [checked]="hasAttribute(attr.get('attrId').value)">
-        <label class="form-check-label" [for]="attr.get('attrId').value">
-          {{ attr.get('attrName').value }} ({{ attr.get('attrValue').value }})
-        </label>
-      </div>
+    <div *ngFor="let attr of allAttributes" class="col-md-4 col-sm-6 col-12">
+      <input name="attr.attrId" class="form-check-input" type="checkbox" [value]="attr.attrValue"
+             [id]="attr.attrId"
+             [checked]="this.hasAttribute(attr.attrId)">
+      <label class="form-check-label" [for]="attr.attrId">
+        {{ attr.attrName }} ({{ attr.attrValue }})
+      </label>
     </div>
   </div>
   <div class="row">

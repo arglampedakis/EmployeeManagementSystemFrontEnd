@@ -1,7 +1,16 @@
-<p>
-  <a routerLink="/attribute/form/new" class="btn btn-primary">New Attribute</a>
-</p>
-
+<div class="row">
+  <div class="col-sm-3">
+    <p>
+      <a routerLink="/attribute/form/new" class="btn btn-primary">New Attribute</a>
+    </p>
+  </div>
+  <div *ngIf="deletionMessage" class="offset-5 col-lg-4 text-center">
+    <div class="alert alert-success box-msg" role="alert">
+      <strong>Attribute successfully deleted!</strong>
+      <img src="../assets/img/check.png" class="rounded mx-2" alt="">
+    </div>
+  </div>
+</div>
 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
   <thead>
   <tr>

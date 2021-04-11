@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EmployeeService} from "../services/employee.service";
 import {AttributeService} from "../../attribute/services/attribute.service";
 import {Attribute} from "../../shared/models/attribute";
 import {formatDate} from "@angular/common";
 import {Employee} from "../../shared/models/employee";
+import {Address} from "../../shared/models/address";
 
 @Component({
   selector: 'app-employee-form',
@@ -16,57 +17,46 @@ export class EmployeeFormComponent implements OnInit {
 
   id;
   originalEmployee: Employee = new Employee();
-  form: FormGroup;
-  // form = new FormGroup({
-  //   empId: new FormControl(),
-  //   empName: new FormControl('', [
-  //     Validators.required,
-  //     Validators.maxLength(50),
-  //     Validators.minLength(2)]),
-  //   empDateOfBirth: new FormControl('', [
-  //     Validators.required]),
-  //   empVehicle: new FormControl('', [
-  //     Validators.required,
-  //     Validators.maxLength(50),
-  //     Validators.minLength(1)]),
-  //   empSupervisor: new FormControl('', [
-  //     Validators.required,
-  //     Validators.maxLength(50),
-  //     Validators.minLength(1)])
-  // });
+  form = new FormGroup({
+    empId: new FormControl(),
+    empName: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(50),
+      Validators.minLength(3)]),
+    empDateOfBirth: new FormControl('', [
+      Validators.required]),
+    empVehicle: new FormControl(''),
+    empSupervisor: new FormControl('', [
+      Validators.required]),
+    addrId: new FormControl(),
+    addrLongitude: new FormControl('', [
+      Validators.required]),
+    addrLatitude: new FormControl('', [
+      Validators.required]),
+    addrCountry: new FormControl('', [
+      Validators.required]),
+    addrCity: new FormControl('', [
+      Validators.required]),
+    addrStreetName: new FormControl('', [
+      Validators.required]),
+    addrStreetNumber: new FormControl('', [
+      Validators.required]),
+    addrPostalCode: new FormControl('', [
+      Validators.required])
+  });
 
-  attributes: Attribute[];
+  allAttributes: Attribute[];
   employeesAttributes: Attribute[] = [];
 
   constructor(private employeeService: EmployeeService,
               private attributeService: AttributeService,
               private route: ActivatedRoute,
-              private router: Router,
-              private formBuilder: FormBuilder) {
-
-    this.form = this.formBuilder.group({
-      empId: new FormControl(),
-      empName: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(50),
-        Validators.minLength(2)]),
-      empDateOfBirth: new FormControl('', [
-        Validators.required]),
-      empVehicle: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(50),
-        Validators.minLength(1)]),
-      empSupervisor: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(50),
-        Validators.minLength(1)]),
-      attributesList: this.formBuilder.array([])
-    });
+              private router: Router) {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
     this.fetchAllAttributes();
+    this.id = this.route.snapshot.paramMap.get('id');
 
     if (this.id) {
       this.employeeService.getById(this.id).subscribe(emp => {
@@ -75,8 +65,6 @@ export class EmployeeFormComponent implements OnInit {
       });
       this.fetchEmployeesAttributes();
     }
-
-
   }
 
   fillFormWithEmployee(emp) {
@@ -90,13 +78,7 @@ export class EmployeeFormComponent implements OnInit {
   }
 
   fetchAllAttributes() {
-    this.attributeService.getAll().subscribe(attributes => {
-      this.attributes = attributes;
-      this.attributes.forEach(attr => {
-        (this.form.get('attributesList') as FormArray).push(this.createAttribute(attr));
-      });
-    });
-
+    this.attributeService.getAll().subscribe(attributes => this.allAttributes = attributes);
   }
 
   fetchEmployeesAttributes() {
@@ -113,13 +95,23 @@ export class EmployeeFormComponent implements OnInit {
         invalidSubmit: true
       });
     } else {
+      let emp = new Employee(this.empId.value, this.empName.value, this.empDateOfBirth.value, this.empVehicle.value, this.empSupervisor.value);
+      let address = new Address(
+        this.addrId.value,
+        this.addrLongitude.value,
+        this.addrLatitude.value,
+        this.addrCountry.value,
+        this.addrCity.value,
+        this.addrStreetName.value,
+        this.addrStreetNumber.value,
+        this.addrPostalCode.value,
+        this.empId.value
+      );
+      let attributes;
+
       // this.employeeService.save(this.form.value).subscribe();
       this.router.navigate(['/employee']);
     }
-  }
-
-  createAttribute(attr: Attribute): FormGroup {
-    return this.formBuilder.group(attr);
   }
 
   resetForm() {
@@ -146,8 +138,36 @@ export class EmployeeFormComponent implements OnInit {
     return this.form.get('empSupervisor');
   }
 
-  get attributesList() {
-    return this.form.get('attributesList')['controls'];
+  get addrId() {
+    return this.form.get('addrId');
+  }
+
+  get addrLongitude() {
+    return this.form.get('addrLongitude');
+  }
+
+  get addrLatitude() {
+    return this.form.get('addrLatitude');
+  }
+
+  get addrCountry() {
+    return this.form.get('addrCountry');
+  }
+
+  get addrCity() {
+    return this.form.get('addrCity');
+  }
+
+  get addrStreetName() {
+    return this.form.get('addrStreetName');
+  }
+
+  get addrStreetNumber() {
+    return this.form.get('addrStreetNumber');
+  }
+
+  get addrPostalCode() {
+    return this.form.get('addrPostalCode');
   }
 
 }
