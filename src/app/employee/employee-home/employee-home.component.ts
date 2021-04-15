@@ -52,7 +52,7 @@ export class EmployeeHomeComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
     this.dtTrigger.unsubscribe();
   }
-
+  //TODO find out how this filter works
   filter(query: string) {
     this.filteredEmployees = (query) ?
       this.employees.filter(e => e.empName.toLowerCase().includes(query.toLowerCase())) :

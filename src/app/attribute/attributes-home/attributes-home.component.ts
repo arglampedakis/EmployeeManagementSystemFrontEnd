@@ -33,11 +33,14 @@ export class AttributesHomeComponent implements OnInit, OnDestroy {
         map(actions =>
           actions.map(action => {
               const data = action as Attribute;
-              this.dtTrigger.next();
+              // this.dtTrigger.next();
               return data;
             }
           )))
-      .subscribe(attributes => this.attributes = this.filteredAttributes = attributes);
+      .subscribe(attributes => {
+        this.attributes = this.filteredAttributes = attributes;
+        this.dtTrigger.next();
+      });
   }
 
   ngOnInit(): void {
@@ -60,7 +63,7 @@ export class AttributesHomeComponent implements OnInit, OnDestroy {
       this.fadeOutLink();
     }
   }
-
+  //TODO find out how this filter works
   filter(query: string) {
     this.filteredAttributes = (query) ?
       this.attributes.filter(a => a.attrName.toLowerCase().includes(query.toLowerCase())) :

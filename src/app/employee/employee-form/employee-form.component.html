@@ -110,12 +110,13 @@
   <div class="row">
     <hr>
     <h5 class="">Select Attributes for this employee:</h5>
-    <div *ngFor="let attr of allAttributes" class="col-md-4 col-sm-6 col-12">
-      <input name="attr.attrId" class="form-check-input" type="checkbox" [value]="attr.attrValue"
+    <div *ngFor="let attr of allAttributes" formGroupName="attributes" class="col-md-4 col-sm-6 col-12">
+      <input [formControlName]="attr.attrId" name="attr.attrId" class="form-check-input" type="checkbox" [value]="attr.attrValue"
              [id]="attr.attrId"
-             [checked]="this.hasAttribute(attr.attrId)">
-      <label class="form-check-label" [for]="attr.attrId">
-        {{ attr.attrName }} ({{ attr.attrValue }})
+             [checked]="this.hasAttribute(attr.attrId)"
+             (change)="updateAttributes(attr.attrId)" >
+      <label class="form-check-label px-1" [for]="attr.attrId">
+         {{ attr.attrName }} ({{ attr.attrValue }})
       </label>
     </div>
   </div>
@@ -123,7 +124,7 @@
     <div class="col text-center my-3">
       <hr>
       <button class="btn btn-primary mx-auto" type="submit">Save</button>
-      <button class="btn btn-outline-primary mx-4" type="button" (click)="resetForm()">Clear</button>
+      <button class="btn btn-outline-primary mx-4" type="button" (click)="resetForm()">Reset</button>
     </div>
   </div>
 </form>

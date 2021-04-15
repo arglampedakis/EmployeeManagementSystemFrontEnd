@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EmployeeService} from "../services/employee.service";
@@ -7,17 +7,25 @@ import {Attribute} from "../../shared/models/attribute";
 import {formatDate} from "@angular/common";
 import {Employee} from "../../shared/models/employee";
 import {Address} from "../../shared/models/address";
+import {takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
+
 
 @Component({
   selector: 'app-employee-form',
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.css']
 })
-export class EmployeeFormComponent implements OnInit {
+export class EmployeeFormComponent implements OnInit , OnDestroy{
+
+  private readonly attributesFormGroup = new FormGroup({}, []);
 
   id;
   originalEmployee: Employee = new Employee();
-  form = new FormGroup({
+  originalEmployeeAttributes: Attribute[] = [];
+  allAttributes: Attribute[];
+
+  form: FormGroup = new FormGroup({
     empId: new FormControl(),
     empName: new FormControl('', [
       Validators.required,
@@ -42,11 +50,12 @@ export class EmployeeFormComponent implements OnInit {
     addrStreetNumber: new FormControl('', [
       Validators.required]),
     addrPostalCode: new FormControl('', [
-      Validators.required])
+      Validators.required]),
+    attributes: this.attributesFormGroup
   });
 
-  allAttributes: Attribute[];
-  employeesAttributes: Attribute[] = [];
+  currentlyCheckedAttributes: Attribute[] = [];
+  destroy = new Subject();
 
   constructor(private employeeService: EmployeeService,
               private attributeService: AttributeService,
@@ -59,12 +68,16 @@ export class EmployeeFormComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
 
     if (this.id) {
-      this.employeeService.getById(this.id).subscribe(emp => {
+      this.employeeService.getById(this.id).pipe(takeUntil(this.destroy)).subscribe(emp => {
         this.originalEmployee = emp;
         this.fillFormWithEmployee(emp);
       });
       this.fetchEmployeesAttributes();
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
   }
 
   fillFormWithEmployee(emp) {
@@ -82,11 +95,23 @@ export class EmployeeFormComponent implements OnInit {
   }
 
   fetchEmployeesAttributes() {
-    this.employeeService.getEmployeeAttributesById(this.id).subscribe(attributes => this.employeesAttributes = attributes);
+    this.employeeService.getEmployeeAttributesById(this.id)
+      .subscribe(attributes => this.originalEmployeeAttributes = this.currentlyCheckedAttributes = attributes);
   }
 
   hasAttribute(attrId) {
-    return this.employeesAttributes.map(attr => attr.attrId).indexOf(attrId) != -1;
+    return this.originalEmployeeAttributes.map(attr => attr.attrId).indexOf(attrId) != -1;
+  }
+
+  updateAttributes(attrId) {
+    if (this.hasAttribute(attrId)) {
+      let index = this.currentlyCheckedAttributes.map(attr => attr.attrId).indexOf(attrId);
+      this.currentlyCheckedAttributes.splice(index, 1);
+    } else {
+      this.currentlyCheckedAttributes.push(
+        this.allAttributes[this.allAttributes.map(attr => attr.attrId).indexOf(attrId)]
+      );
+    }
   }
 
   save() {
@@ -95,7 +120,13 @@ export class EmployeeFormComponent implements OnInit {
         invalidSubmit: true
       });
     } else {
-      let emp = new Employee(this.empId.value, this.empName.value, this.empDateOfBirth.value, this.empVehicle.value, this.empSupervisor.value);
+      let emp = new Employee(
+        this.empId.value,
+        this.empName.value,
+        this.empDateOfBirth.value,
+        this.empVehicle.value,
+        this.empSupervisor.value);
+
       let address = new Address(
         this.addrId.value,
         this.addrLongitude.value,
@@ -107,7 +138,8 @@ export class EmployeeFormComponent implements OnInit {
         this.addrPostalCode.value,
         this.empId.value
       );
-      let attributes;
+
+      let empAttributes = this.currentlyCheckedAttributes;
 
       // this.employeeService.save(this.form.value).subscribe();
       this.router.navigate(['/employee']);
@@ -116,6 +148,7 @@ export class EmployeeFormComponent implements OnInit {
 
   resetForm() {
     this.fillFormWithEmployee(this.originalEmployee);
+    this.currentlyCheckedAttributes = this.originalEmployeeAttributes;
   }
 
   get empId() {
