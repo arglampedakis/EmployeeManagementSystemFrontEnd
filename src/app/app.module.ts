@@ -15,6 +15,8 @@ import {AppErrorHandler} from './shared/errors/app-error-handler';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { EmployeeHomeComponent } from './employee/employee-home/employee-home.component';
 import { EmployeeFormComponent } from './employee/employee-form/employee-form.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ProfileFormComponent } from './employee/profile-form/profile-form.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { EmployeeFormComponent } from './employee/employee-form/employee-form.co
     AttributeFormComponent,
     AttributesHomeComponent,
     EmployeeHomeComponent,
-    EmployeeFormComponent
+    EmployeeFormComponent,
+    ProfileComponent,
+    ProfileFormComponent
   ],
   imports: [
     BrowserModule,
