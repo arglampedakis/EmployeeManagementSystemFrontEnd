@@ -5,7 +5,7 @@ import {BadInput} from "../../shared/errors/bad-input";
 import {NotFoundError} from "../../shared/errors/not-found-error";
 import {AppError} from "../../shared/errors/app-error";
 import {Employee} from "../../shared/models/employee";
-import {catchError} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import {Profile} from "../../shared/models/profile";
 
 @Injectable({
@@ -19,9 +19,11 @@ export class ProfileService {
   }
 
   getByEmpId(id): Observable<Profile> {
-    return this.http.get<Profile>(this.url + id).pipe(
+    return this.http.get(this.url + id).pipe(
       catchError(this.handleError)
-    );
+    )  .pipe(map( dto => {
+      return Profile.profileFromDto(dto);
+    }));
   }
 
   save(profile: Profile) {

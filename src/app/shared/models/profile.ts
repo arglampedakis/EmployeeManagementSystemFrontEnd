@@ -8,7 +8,9 @@ export class Profile {
               private _address?: Address,
               private _attributes?: Attribute[]) {
   }
-
+  static profileFromDto(prof: any): Profile{
+    return new Profile(prof.employeeDto, prof.addressDto, prof.attributeDtos);
+  }
   get employee(): Employee {
     return this._employee;
   }

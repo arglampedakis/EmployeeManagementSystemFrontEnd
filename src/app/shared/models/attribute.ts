@@ -1,5 +1,5 @@
 export class Attribute {
-  constructor(private _attrId?: number, private _attrName?: string, private _attrValue?: string) {
+  constructor(private _attrId?: number, private _attrName?: string, private _attrValue?: string, private _isChecked?: boolean) {
   }
 
   get attrId(): number {
@@ -24,5 +24,13 @@ export class Attribute {
 
   set attrValue(value: string) {
     this._attrValue = value;
+  }
+
+  get isChecked(): boolean {
+    return this._isChecked;
+  }
+
+  set isChecked(value: boolean) {
+    this._isChecked = value;
   }
 }

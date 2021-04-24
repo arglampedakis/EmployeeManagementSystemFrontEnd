@@ -15,7 +15,6 @@ import {AppErrorHandler} from './shared/errors/app-error-handler';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { EmployeeHomeComponent } from './employee/employee-home/employee-home.component';
 import { EmployeeFormComponent } from './employee/employee-form/employee-form.component';
-import { ProfileComponent } from './profile/profile.component';
 import { ProfileFormComponent } from './employee/profile-form/profile-form.component';
 
 @NgModule({
@@ -28,7 +27,6 @@ import { ProfileFormComponent } from './employee/profile-form/profile-form.compo
     AttributesHomeComponent,
     EmployeeHomeComponent,
     EmployeeFormComponent,
-    ProfileComponent,
     ProfileFormComponent
   ],
   imports: [
@@ -42,8 +40,8 @@ import { ProfileFormComponent } from './employee/profile-form/profile-form.compo
       {path: 'attribute/form/new', component: AttributeFormComponent},
       {path: 'attribute/form/:id', component: AttributeFormComponent},
       {path: 'attribute', component: AttributesHomeComponent},
-      {path: 'employee/form/new', component: EmployeeFormComponent},
-      {path: 'employee/form/:id', component: EmployeeFormComponent},
+      {path: 'employee/form/new', component: ProfileFormComponent},
+      {path: 'employee/form/:id', component: ProfileFormComponent},
       {path: 'employee', component: EmployeeHomeComponent}
     ])
   ],

@@ -1,131 +1,135 @@
 <div class="row mt-5">
   <div class="col text-center">
-    <h5>Create/Update an Employee</h5>
+    <h5>Create/Update an Employee!</h5>
   </div>
 </div>
 
-<form>
-<!--  <form [formGroup]="form" (ngSubmit)="this.save()">-->
-  <div class="row mt-4">
-    <div class="col-md-6">
-<!--      <div *ngIf="form.errors" class="alert alert-danger">-->
-<!--        Invalid submit. Please fill all the necessary inputs.-->
-<!--      </div>-->
-      <input type="text" formControlName="empId" hidden>
-      <div class="form-floating mb-3">
-        <input formControlName="empName"
-               type="text" class="form-control" id="empName">
-        <label for="empName">Name</label>
-<!--        <div *ngIf="empName.touched && empName.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="empName.errors.required">Employee name is required.</div>-->
-<!--          <div *ngIf="empName.errors.minlength">Employee name should be at least 3 characters.</div>-->
-<!--          <div *ngIf="empName.errors.maxlength">Employee name should be at most 50 characters.</div>-->
-<!--        </div>-->
+<form [formGroup]="form">
+  <div formGroupName="employee">
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div *ngIf="form.errors" class="alert alert-danger">
+          Invalid submit. Please fill all the necessary inputs.
+        </div>
+        <input type="text" formControlName="empId" hidden>
+        <div class="form-floating mb-3">
+          <input formControlName="empName"
+                 type="text" class="form-control" id="empName">
+          <label for="empName">Name</label>
+          <div *ngIf="empName.touched && empName.invalid" class="alert alert-danger">
+            <div *ngIf="empName.errors.required">Employee name is required.</div>
+            <div *ngIf="empName.errors.minlength">Employee name should be at least 3 characters.</div>
+            <div *ngIf="empName.errors.maxlength">Employee name should be at most 50 characters.</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input formControlName="empDateOfBirth"
+                 type="date" class="form-control" id="empDateOfBirth">
+          <label for="empDateOfBirth">Date of Birth</label>
+          <div *ngIf="empDateOfBirth.touched && empDateOfBirth.invalid" class="alert alert-danger">
+            <div *ngIf="empDateOfBirth.errors.required">Date of Birth is required.</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="form-floating mb-3">
-        <input formControlName="empDateOfBirth"
-               type="date" class="form-control" id="empDateOfBirth">
-        <label for="empDateOfBirth">Date of Birth</label>
-<!--        <div *ngIf="empDateOfBirth.touched && empDateOfBirth.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="empDateOfBirth.errors.required">Date of Birth is required.</div>-->
-<!--        </div>-->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input formControlName="empSupervisor"
+                 type="number" class="form-control" id="empSupervisor">
+          <label for="empSupervisor">Supervisor Id</label>
+          <div *ngIf="empSupervisor.touched && empSupervisor.invalid" class="alert alert-danger">
+            <div *ngIf="empSupervisor.errors.required">Supervisor Id is required.</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-floating mb-3">
-        <input formControlName="empSupervisor"
-               type="number" class="form-control" id="empSupervisor">
-        <label for="empSupervisor">Supervisor Id</label>
-<!--        <div *ngIf="empSupervisor.touched && empSupervisor.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="empSupervisor.errors.required">Supervisor Id is required.</div>-->
-<!--        </div>-->
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-check mb-3">
-        <div class="form-check form-switch">
-          <input formControlName="empVehicle" class="form-check-input" type="checkbox" id="empVehicle">
-          <label class="form-check-label" for="empVehicle">Has Vehicle</label>
+      <div class="col-md-6">
+        <div class="form-check mb-3">
+          <!--        might need to remove this div-->
+          <div class="form-check form-switch">
+            <input formControlName="empVehicle" class="form-check-input" type="checkbox" id="empVehicle">
+            <label class="form-check-label" for="empVehicle">Has Vehicle</label>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <hr>
-  <div class="row mb-2">
-    <div class="col-md-6">
-      <input type="text" formControlName="addrId" hidden>
-      <input type="text" formControlName="addrLongitude" hidden>
-      <input type="text" formControlName="addrLatitude" hidden>
+  <div formGroupName="address">
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <input type="text" formControlName="addrId" hidden>
+        <input type="text" formControlName="addrLongitude" hidden>
+        <input type="text" formControlName="addrLatitude" hidden>
 
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" formControlName="addrCountry" id="addrCountry">
-        <label for="addrCountry">Country</label>
-<!--        <div *ngIf="addrCountry.touched && addrCountry.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="addrCountry.errors.required">Country is required.</div>-->
-<!--        </div>-->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" formControlName="addrCountry" id="addrCountry">
+          <label for="addrCountry">Country</label>
+          <div *ngIf="addrCountry.touched && addrCountry.invalid" class="alert alert-danger">
+            <div *ngIf="addrCountry.errors.required">Country is required.</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="addrCity" formControlName="addrCity">
+          <label for="addrCity">City</label>
+          <div *ngIf="addrCity.touched && addrCity.invalid" class="alert alert-danger">
+            <div *ngIf="addrCity.errors.required">City is required.</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="addrCity" formControlName="addrCity">
-        <label for="addrCity">City</label>
-<!--        <div *ngIf="addrCity.touched && addrCity.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="addrCity.errors.required">City is required.</div>-->
-<!--        </div>-->
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="addrStreetName" formControlName="addrStreetName">
+          <label for="addrStreetName">Street Name</label>
+          <div *ngIf="addrStreetName.touched && addrStreetName.invalid" class="alert alert-danger">
+            <div *ngIf="addrStreetName.errors.required">Street Name is required.</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row mb-2">
-    <div class="col-md-4">
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="addrStreetName" formControlName="addrStreetName">
-        <label for="addrStreetName">Street Name</label>
-<!--        <div *ngIf="addrStreetName.touched && addrStreetName.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="addrStreetName.errors.required">Street Name is required.</div>-->
-<!--        </div>-->
+      <div class="col-md-2">
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" id="addrStreetNumber" formControlName="addrStreetNumber">
+          <label for="addrStreetNumber">Str. Num</label>
+          <div *ngIf="addrStreetNumber.touched && addrStreetNumber.invalid" class="alert alert-danger">
+            <div *ngIf="addrStreetNumber.errors.required">Street Number is required.</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-md-2">
-      <div class="form-floating mb-3">
-        <input type="number" class="form-control" id="addrStreetNumber" formControlName="addrStreetNumber">
-        <label for="addrStreetNumber">Street Number</label>
-<!--        <div *ngIf="addrStreetNumber.touched && addrStreetNumber.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="addrStreetNumber.errors.required">Street Number is required.</div>-->
-<!--        </div>-->
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="addrPostalCode" formControlName="addrPostalCode">
-        <label for="addrPostalCode">Post Code</label>
-<!--        <div *ngIf="addrPostalCode.touched && addrPostalCode.invalid" class="alert alert-danger">-->
-<!--          <div *ngIf="addrPostalCode.errors.required">Postal Code is required.</div>-->
-<!--        </div>-->
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="addrPostalCode" formControlName="addrPostalCode">
+          <label for="addrPostalCode">Post Code</label>
+          <div *ngIf="addrPostalCode.touched && addrPostalCode.invalid" class="alert alert-danger">
+            <div *ngIf="addrPostalCode.errors.required">Postal Code is required.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <div class="row">
     <hr>
-    <h5 class="">Select Attributes for this employee:</h5>
-<!--    <div *ngFor="let attr of allAttributes" formGroupName="attributes" class="col-md-4 col-sm-6 col-12">-->
-<!--      <input [formControlName]="attr.attrId" name="attr.attrId" class="form-check-input" type="checkbox" [value]="attr.attrValue"-->
-<!--             [id]="attr.attrId"-->
-<!--             [checked]="this.hasAttribute(attr.attrId)"-->
-<!--             (change)="updateAttributes(attr.attrId)" >-->
-<!--      <label class="form-check-label px-1" [for]="attr.attrId">-->
-<!--        {{ attr.attrName }} ({{ attr.attrValue }})-->
-<!--      </label>-->
-<!--    </div>-->
+    <h5 class="text-center">Select Attributes for this employee:</h5>
+    <div formGroupName="attributes"  *ngIf="hasFinished">
+      <div *ngFor="let attr of formProfile.attributes" class="col-md-4 col-sm-6 col-12">
+        <input [formControlName]="attr.attrId" name="attr.attrId" class="form-check-input" type="checkbox"
+               [id]="attr.attrId">
+        <label class="form-check-label px-1" [for]="attr.attrId">
+          {{ attr.attrName }} ({{ attr.attrValue }})
+        </label>
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col text-center my-3">
       <hr>
       <button class="btn btn-primary mx-auto" type="submit">Save</button>
-<!--      <button class="btn btn-outline-primary mx-4" type="button" (click)="resetForm()">Reset</button>-->
+      <!--      <button class="btn btn-outline-primary mx-4" type="button" (click)="resetForm()">Reset</button>-->
     </div>
   </div>
 </form>
