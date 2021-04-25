@@ -8,7 +8,21 @@ export class Address {
               private _addrStreetName?: string,
               private _addrStreetNumber?: string,
               private _addrPostalCode?: string,
-              private _addrEmpid?: number) {
+              private _addrEmpId?: number) {
+  }
+
+  static emptyAddress() {
+    return {
+      addrId: null,
+      addrLongitude: null,
+      addrLatitude: null,
+      addrCountry: "",
+      addrCity: "",
+      addrStreetName: "",
+      addrStreetNumber: "",
+      addrPostalCode: "",
+      addrEmpId: null
+    };
   }
 
   get addrId(): number {
@@ -75,11 +89,11 @@ export class Address {
     this._addrPostalCode = value;
   }
 
-  get addrEmpid(): number {
-    return this._addrEmpid;
+  get addrEmpId(): number {
+    return this._addrEmpId;
   }
 
-  set addrEmpid(value: number) {
-    this._addrEmpid = value;
+  set addrEmpId(value: number) {
+    this._addrEmpId = value;
   }
 }

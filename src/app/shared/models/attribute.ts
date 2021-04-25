@@ -1,7 +1,10 @@
 export class Attribute {
-  constructor(private _attrId?: number, private _attrName?: string, private _attrValue?: string, private _isChecked?: boolean) {
+  constructor(private _attrId?: number, private _attrName?: string, private _attrValue?: string, private _selected?: boolean) {
   }
 
+  static emptyAttribute(){
+    return {attrId: null, attrName: "", attrValue: "", selected: false};
+  }
   get attrId(): number {
     return this._attrId;
   }
@@ -26,11 +29,11 @@ export class Attribute {
     this._attrValue = value;
   }
 
-  get isChecked(): boolean {
-    return this._isChecked;
+  get selected(): boolean {
+    return this._selected;
   }
 
-  set isChecked(value: boolean) {
-    this._isChecked = value;
+  set selected(value: boolean) {
+    this._selected = value;
   }
 }

@@ -11,6 +11,10 @@ export class Profile {
   static profileFromDto(prof: any): Profile{
     return new Profile(prof.employeeDto, prof.addressDto, prof.attributeDtos);
   }
+
+  static emptyProfile(){
+    return new Profile( Employee.emptyEmployee(), Address.emptyAddress(), [Attribute.emptyAttribute()]);
+  }
   get employee(): Employee {
     return this._employee;
   }

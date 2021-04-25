@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProfileService} from "../services/profile.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map, takeUntil} from "rxjs/operators";
+import {takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
 import {Profile} from "../../shared/models/profile";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AttributeService} from "../../attribute/services/attribute.service";
 import {Attribute} from "../../shared/models/attribute";
 import {formatDate} from "@angular/common";
@@ -21,7 +21,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   originalProfile: Profile;
   formProfile: Profile;
   destroy = new Subject();
-  private readonly attributesFormGroup = new FormGroup({}, []);
+  private readonly attributesFormArray = new FormArray([]);
 
   form: FormGroup = new FormGroup({
     employee: new FormGroup({
@@ -33,8 +33,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
       empDateOfBirth: new FormControl('', [
         Validators.required]),
       empVehicle: new FormControl(''),
-      empSupervisor: new FormControl('', [
-        Validators.required])
+      empSupervisor: new FormControl('', [])
     }),
     address: new FormGroup({
       addrId: new FormControl(),
@@ -54,7 +53,7 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
       addrPostalCode: new FormControl('', [
         Validators.required]),
     }),
-    attributes: this.attributesFormGroup
+    attributes: this.attributesFormArray
   });
 
   constructor(private profileService: ProfileService,
@@ -72,40 +71,41 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
         this.fillForm(this.formProfile);
       });
     } else {
-      this.fillFormWithEmptyProfile();
+      this.attributeService.getAll().pipe(takeUntil(this.destroy)).subscribe(attributes => {
+        this.originalProfile = Profile.emptyProfile();
+        this.originalProfile.attributes = attributes;
+        this.formProfile = this.originalProfile;
+        this.fillForm(this.formProfile);
+      });
+
     }
   }
 
   fillForm(profile: Profile) {
-    // profile.attributes.forEach( attr => this.attributesFormGroup.addControl(attr.attrId.toString(), new FormControl()));
     this.employee.setValue(profile.employee);
     this.address.setValue(profile.address);
     profile.attributes.forEach(attr => {
-      this.attributesFormGroup.addControl(attr.attrId.toString(), new FormControl(attr.isChecked || false));
-      this.attributes.get(attr.attrId.toString()).setValue(attr);
+      this.attributesFormArray.push(new FormControl(attr.selected));
     });
-    this.hasFinished = true;
-
     if (profile.employee.empDateOfBirth) {
       this.form.controls.employee.get('empDateOfBirth')
         .setValue(formatDate(new Date(profile.employee.empDateOfBirth), 'yyyy-MM-dd', 'en'));
     }
-
-    console.log(this.formProfile);
-    console.log(this.form.controls);
-  }
-
-  fillFormWithEmptyProfile() {
-    this.attributeService.getAll().pipe(takeUntil(this.destroy)).subscribe(attributes => {
-      this.originalProfile = new Profile();
-      this.originalProfile.attributes = attributes;
-      this.formProfile = this.originalProfile;
-      attributes.forEach(attr => this.attributesFormGroup.addControl(attr.attrId.toString(), new FormControl( attr.isChecked || false)));
-      this.form.setValue(this.formProfile);
-    });
     this.hasFinished = true;
   }
 
+  //TODO will delete this and create an onSubmit()
+  onAttributeChange(attr: Attribute) {
+    const selectedAttrs = this.form.value.attributes
+      .map((isChecked, i) => isChecked ? this.formProfile.attributes[i] : null)
+      .filter(v => v !== null);
+    console.log(selectedAttrs);
+  }
+  //TODO fix this
+  resetForm(){
+    this.formProfile = this.originalProfile;
+    this.fillForm(this.formProfile);
+  }
   ngOnDestroy(): void {
     this.destroy.next();
   }
@@ -171,6 +171,6 @@ export class ProfileFormComponent implements OnInit, OnDestroy {
   }
 
   get attributes() {
-    return this.form.get('attributes');
+    return this.form.controls.attributes as FormArray;
   }
 }

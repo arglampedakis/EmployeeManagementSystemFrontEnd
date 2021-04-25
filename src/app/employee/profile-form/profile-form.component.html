@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<form [formGroup]="form">
+<form [formGroup]="form" *ngIf="hasFinished">
   <div formGroupName="employee">
     <div class="row mt-4">
       <div class="col-md-6">
@@ -112,24 +112,22 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" formArrayName="attributes">
     <hr>
     <h5 class="text-center">Select Attributes for this employee:</h5>
-    <div formGroupName="attributes"  *ngIf="hasFinished">
-      <div *ngFor="let attr of formProfile.attributes" class="col-md-4 col-sm-6 col-12">
-        <input [formControlName]="attr.attrId" name="attr.attrId" class="form-check-input" type="checkbox"
-               [id]="attr.attrId">
-        <label class="form-check-label px-1" [for]="attr.attrId">
-          {{ attr.attrName }} ({{ attr.attrValue }})
-        </label>
-      </div>
+    <div *ngFor="let attr of attributes.controls; let i = index" class="col-md-4 col-sm-6 col-12">
+      <input [formControlName]="i" name="attr.attrId" class="form-check-input" type="checkbox" [id]="i"
+             (change)="onAttributeChange(formProfile.attributes[i])">
+      <label class="form-check-label px-1" [for]="i">
+        {{ formProfile.attributes[i].attrName }}
+      </label>
     </div>
   </div>
   <div class="row">
     <div class="col text-center my-3">
       <hr>
       <button class="btn btn-primary mx-auto" type="submit">Save</button>
-      <!--      <button class="btn btn-outline-primary mx-4" type="button" (click)="resetForm()">Reset</button>-->
+      <button class="btn btn-outline-primary mx-4" type="button" (click)="resetForm()">Reset</button>
     </div>
   </div>
 </form>

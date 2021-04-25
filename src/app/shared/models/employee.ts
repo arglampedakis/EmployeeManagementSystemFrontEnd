@@ -7,6 +7,9 @@ export class Employee {
               private _empSupervisor?: number) {
   }
 
+  static emptyEmployee(){
+    return {empId: null, empName: "", empDateOfBirth: new Date(), empVehicle: false, empSupervisor: null};
+  }
   get empId(): number {
     return this._empId;
   }
