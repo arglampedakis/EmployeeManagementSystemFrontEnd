@@ -12,10 +12,12 @@ import {DataTablesModule} from "angular-datatables";
 import {HttpClientModule} from "@angular/common/http";
 import {AttributeService} from "./attribute/services/attribute.service";
 import {AppErrorHandler} from './shared/errors/app-error-handler';
+import { GoogleMapsModule } from '@angular/google-maps'
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { EmployeeHomeComponent } from './employee/employee-home/employee-home.component';
 import { EmployeeFormComponent } from './employee/employee-form/employee-form.component';
 import { ProfileFormComponent } from './employee/profile-form/profile-form.component';
+import { MapComponent } from './map/my-map/map.component';
 
 @NgModule({
   declarations: [
@@ -27,12 +29,14 @@ import { ProfileFormComponent } from './employee/profile-form/profile-form.compo
     AttributesHomeComponent,
     EmployeeHomeComponent,
     EmployeeFormComponent,
-    ProfileFormComponent
+    ProfileFormComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
+    GoogleMapsModule,
     DataTablesModule,
     HttpClientModule,
     RouterModule.forRoot([
@@ -42,7 +46,8 @@ import { ProfileFormComponent } from './employee/profile-form/profile-form.compo
       {path: 'attribute', component: AttributesHomeComponent},
       {path: 'employee/form/new', component: ProfileFormComponent},
       {path: 'employee/form/:id', component: ProfileFormComponent},
-      {path: 'employee', component: EmployeeHomeComponent}
+      {path: 'employee', component: EmployeeHomeComponent},
+      {path: 'map', component: MapComponent}
     ])
   ],
   providers: [
